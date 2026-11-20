@@ -30,12 +30,18 @@ jobs:
           NODE_ENV: test
 
   deploy:
-      name: Desplegar en Render
-      needs: test
-      # Solo despliega si los tests pasan AND el alumno ha configurado su secreto RENDER_DEPLOY_HOOK_URL
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push' && secrets.RENDER_DEPLOY_HOOK_URL != ''
-      runs-on: ubuntu-latest
+    name: Desplegar en Render
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
 
-      steps:
+    steps:
       - name: Disparar Deploy Hook en Render
-          run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        env:
+          RENDER_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -n "$RENDER_HOOK" ]; then
+            curl -X POST "$RENDER_HOOK"
+          else
+            echo "RENDER_DEPLOY_HOOK_URL no configurado. Saltando despliegue."
+          fi
