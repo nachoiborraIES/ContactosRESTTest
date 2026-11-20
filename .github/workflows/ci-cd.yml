@@ -29,13 +29,13 @@ jobs:
         env:
           NODE_ENV: test
 
-    deploy:
-        name: Desplegar en Render
-        needs: test
-        # Solo despliega si los tests pasan AND el alumno ha configurado su secreto RENDER_DEPLOY_HOOK_URL
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push' && secrets.RENDER_DEPLOY_HOOK_URL != ''
-        runs-on: ubuntu-latest
+  deploy:
+      name: Desplegar en Render
+      needs: test
+      # Solo despliega si los tests pasan AND el alumno ha configurado su secreto RENDER_DEPLOY_HOOK_URL
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push' && secrets.RENDER_DEPLOY_HOOK_URL != ''
+      runs-on: ubuntu-latest
 
-        steps:
-        - name: Disparar Deploy Hook en Render
-            run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+      steps:
+      - name: Disparar Deploy Hook en Render
+          run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
