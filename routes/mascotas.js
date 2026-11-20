@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
         let resultado = await Mascota.find();
         res.status(200).send({ok: true, resultado: resultado});
     } catch (error) {
-        res.status(500).send({ok: false, error: "Error obteniendo mascotas"});
+        res.status(500).send({ok: false, error: "Error obteniendo listado de mascotas"});
     }
 });
 
